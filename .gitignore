@@ -3,3 +3,6 @@ venv/
 db.sqlite3
 __pycache__/
 .DS_Store
+# Añade esto extra:
+._*
+**/__MACOSX/

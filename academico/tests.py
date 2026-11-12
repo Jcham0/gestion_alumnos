@@ -162,6 +162,30 @@ class AccesoYRegistroTests(TestCase):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.request['PATH_INFO'], '/accounts/login/')
 
+    def test_raiz_muestra_la_portada_a_profesor_y_alumno(self):
+        for username, grupo in (
+            ('portada_profesor', 'Profesor'),
+            ('portada_alumna', 'Alumno'),
+        ):
+            with self.subTest(grupo=grupo):
+                usuario = get_user_model().objects.create_user(
+                    username=username,
+                    password='R0busta!Clave_2026',
+                )
+                usuario.groups.add(Group.objects.get(name=grupo))
+                self.client.force_login(usuario)
+
+                respuesta = self.client.get('/')
+
+                self.assertEqual(respuesta.status_code, 200)
+                self.assertTemplateUsed(
+                    respuesta,
+                    'academico/inicio.html',
+                )
+                self.assertContains(respuesta, 'Una mejor forma de organizar')
+                self.assertContains(respuesta, 'href="/">Inicio</a>')
+                self.client.logout()
+
     def test_prefijos_principales_cargan_sin_404(self):
         for ruta in ('/academico/', '/reportes/', '/accounts/'):
             with self.subTest(ruta=ruta):
