@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Eliminar asignatura | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Eliminar asignatura</h1>
+    <p>¿Seguro que quieres eliminar {{ object }}?</p>
+    <p>También se eliminarán las matrículas de esta asignatura y las notas asociadas. Esta acción no se puede deshacer.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar eliminación</button>
+        <a href="{% url 'academico:asignatura_lista' %}">Cancelar</a>
+    </form>
+{% endblock %}

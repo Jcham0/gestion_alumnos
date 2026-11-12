@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Mi panel | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Mi panel académico</h1>
+    <p>
+        <a href="{% url 'reportes:boletin_alumno' %}">
+            Descargar mi boletín en CSV
+        </a>
+    </p>
+    {% if matriculas %}
+        {% for matricula in matriculas %}
+            <section class="panel-card">
+                <h2>{{ matricula.asignatura.nombre }}</h2>
+                <p>
+                    Código: {{ matricula.asignatura.codigo }} ·
+                    Curso: {{ matricula.asignatura.curso }} ·
+                    Año académico: {{ matricula.anio_academico }}
+                </p>
+                {% if matricula.notas.all %}
+                    <h3>Notas</h3>
+                    <ul>
+                        {% for nota in matricula.notas.all %}
+                            <li>
+                                {{ nota.get_evaluacion_display }}:
+                                {{ nota.valor }} ({{ nota.fecha|date:"d/m/Y" }})
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <p>Media de esta asignatura y curso: {{ matricula.media|floatformat:2 }}</p>
+                {% else %}
+                    <p>Aún no hay notas registradas.</p>
+                {% endif %}
+            </section>
+        {% endfor %}
+    {% else %}
+        <p>No hay asignaturas asociadas a tu cuenta todavía.</p>
+    {% endif %}
+{% endblock %}

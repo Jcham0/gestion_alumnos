@@ -1,0 +1,7 @@
+email_alumno,codigo_asignatura,evaluacion,valor
+seed.alumno.00001@example.com,SEED001,final,8.50
+seed.alumno.00001@example.com,SEED001,final,8.50
+,SEED001,1ª,7.00
+seed.alumno.00001@example.com,SEED001,2ª,10.50
+no-existe@example.com,SEED001,final,6.00
+seed.alumno.00001@example.com,SEED001,final,

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Crear cuenta | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Crear cuenta de alumno</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear cuenta</button>
+    </form>
+    <p><a href="{% url 'login' %}">Ya tengo una cuenta</a></p>
+{% endblock %}

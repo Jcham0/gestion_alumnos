@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gestión de alumnos{% endblock %}</title>
+    {% load static academico_tags %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <a class="brand" href="{% url 'academico:inicio' %}">Gestión de alumnos</a>
+        <nav aria-label="Navegación principal">
+            {% if user.is_authenticated %}
+                <a href="{% url 'academico:inicio' %}">Inicio</a>
+                {% acceso_gestion_academica user as puede_gestionar %}
+                {% es_alumno user as es_alumno %}
+                {% if puede_gestionar %}
+                    {% if user.is_superuser %}
+                        <span class="role-badge">Superusuario</span>
+                    {% else %}
+                        <span class="role-badge role-profesor">Profesor</span>
+                    {% endif %}
+                    <a href="{% url 'academico:panel_profesor' %}">Panel profesor</a>
+                    <a href="{% url 'academico:alumno_lista' %}">Alumnos</a>
+                    <a href="{% url 'academico:asignatura_lista' %}">Asignaturas</a>
+                    <a href="{% url 'academico:matricula_lista' %}">Matrículas</a>
+                    <a href="{% url 'reportes:importar_notas' %}">Importar notas</a>
+                    <a href="{% url 'reportes:informes' %}">Informes</a>
+                {% elif es_alumno %}
+                    <span class="role-badge role-alumno">Alumno</span>
+                    <a href="{% url 'academico:panel_alumno' %}">Mi panel</a>
+                {% else %}
+                    <span class="role-badge">Usuario</span>
+                {% endif %}
+                {% if user.is_staff %}
+                    <a href="{% url 'admin:index' %}">Administración</a>
+                {% endif %}
+                <span class="session-label">{{ user.username }}</span>
+                <form class="nav-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Cerrar sesión</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Iniciar sesión</a>
+                <a href="{% url 'academico:registro' %}">Crear cuenta</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <section class="messages" aria-label="Mensajes">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}" role="status">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </section>
+        {% endif %}
+        <section class="page-content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</body>
+</html>

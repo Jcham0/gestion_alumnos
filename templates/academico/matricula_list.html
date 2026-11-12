@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Matrículas | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Matrículas</h1>
+    <p>
+        <a href="{% url 'academico:matricula_crear' %}">
+            Crear matrícula
+        </a>
+    </p>
+    {% if matriculas %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Asignatura</th>
+                        <th>Año académico</th>
+                        <th>Notas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for matricula in matriculas %}
+                        <tr>
+                            <td>{{ matricula.alumno }}</td>
+                            <td>{{ matricula.asignatura }}</td>
+                            <td>{{ matricula.anio_academico }}</td>
+                            <td>
+                                {% for nota in matricula.notas.all %}
+                                    {{ nota.get_evaluacion_display }}: {{ nota.valor }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    Sin notas
+                                {% endfor %}
+                                <a href="{% url 'academico:nota_crear' %}?matricula={{ matricula.pk }}">
+                                    Registrar nota
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'academico:matricula_editar' matricula.pk %}">
+                                    Editar
+                                </a>
+                                <a href="{% url 'academico:matricula_eliminar' matricula.pk %}">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No hay matrículas registradas.</p>
+    {% endif %}
+
+    {% if is_paginated %}
+        <nav class="pagination" aria-label="Paginación">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </nav>
+    {% endif %}
+{% endblock %}

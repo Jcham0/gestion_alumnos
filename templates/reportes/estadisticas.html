@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Informes académicos | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Informes académicos</h1>
+    <nav aria-label="Secciones del informe">
+        <a href="#notas">Notas</a>
+        <a href="#medias">Medias</a>
+        <a href="#aprobados">Aprobados</a>
+        <a href="#ranking">Ranking</a>
+        <a href="#atipicos">Valores atípicos</a>
+        <a href="#boletines">Boletines</a>
+    </nav>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Aplicar filtros</button>
+        <a href="{% url 'reportes:informes' %}">Quitar filtros</a>
+    </form>
+
+    <p class="export-links">
+        Descargar datos filtrados:
+        <a href="?asignatura={{ request.GET.asignatura|urlencode }}&amp;anio={{ request.GET.anio|urlencode }}&amp;export=csv">CSV</a>
+        <a href="?asignatura={{ request.GET.asignatura|urlencode }}&amp;anio={{ request.GET.anio|urlencode }}&amp;export=xlsx">Excel</a>
+    </p>
+
+    <section id="notas">
+        <h2>Notas incluidas</h2>
+        {% if notas %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Alumno</th>
+                            <th>Asignatura</th>
+                            <th>Evaluación</th>
+                            <th>Nota</th>
+                            <th>Año académico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in notas %}
+                            <tr class="{% if fila.valor < 5 %}nota-suspensa{% endif %}">
+                                <td>{{ fila.alumno }}</td>
+                                <td>{{ fila.asignatura }}</td>
+                                <td>{{ fila.evaluacion }}</td>
+                                <td class="numeric">{{ fila.valor|floatformat:2 }}</td>
+                                <td>{{ fila.anio }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No hay notas para los filtros seleccionados.</p>
+        {% endif %}
+    </section>
+
+    <section id="medias">
+        <h2>Media por asignatura</h2>
+        {% if medias %}
+            <table>
+                <thead>
+                    <tr><th>Asignatura</th><th>Media</th></tr>
+                </thead>
+                <tbody>
+                    {% for fila in medias %}
+                        <tr>
+                            <td>{{ fila.asignatura }}</td>
+                            <td class="numeric">{{ fila.media|floatformat:2 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay notas para los filtros seleccionados.</p>
+        {% endif %}
+    </section>
+
+    <section id="aprobados">
+        <h2>Porcentaje de aprobados</h2>
+        {% if aprobados %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Notas aprobadas</th>
+                        <th>Total de notas</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in aprobados %}
+                        <tr>
+                            <td>{{ fila.asignatura }}</td>
+                            <td class="numeric">{{ fila.aprobados }}</td>
+                            <td class="numeric">{{ fila.total }}</td>
+                            <td class="numeric">{{ fila.porcentaje_aprobados|floatformat:1 }} %</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay notas para calcular aprobados.</p>
+        {% endif %}
+    </section>
+
+    <section id="ranking">
+        <h2>Ranking de alumnos</h2>
+        {% if ranking %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Posición</th>
+                        <th>Alumno</th>
+                        <th>Media</th>
+                        <th>Notas consideradas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in ranking %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ fila.alumno }}</td>
+                            <td class="numeric">{{ fila.media|floatformat:2 }}</td>
+                            <td class="numeric">{{ fila.cantidad_notas }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay notas para formar un ranking.</p>
+        {% endif %}
+    </section>
+
+    <section id="atipicos">
+        <h2>Valores atípicos (método IQR)</h2>
+        {% if atipicos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Asignatura</th>
+                        <th>Evaluación</th>
+                        <th>Valor</th>
+                        <th>Año académico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in atipicos %}
+                        <tr>
+                            <td>{{ fila.alumno }}</td>
+                            <td>{{ fila.asignatura }}</td>
+                            <td>{{ fila.evaluacion }}</td>
+                            <td class="numeric">{{ fila.valor|floatformat:2 }}</td>
+                            <td>{{ fila.anio }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No se detectaron valores atípicos.</p>
+        {% endif %}
+    </section>
+
+    <section id="boletines">
+        <h2>Boletín individual</h2>
+        <p>Selecciona un alumno para descargar sus notas y medias en CSV.</p>
+        <form method="get" action="{% url 'reportes:boletin_alumno' %}">
+            <label for="id_alumno_boletin">Alumno</label>
+            <select id="id_alumno_boletin" name="alumno" required>
+                <option value="">Selecciona un alumno</option>
+                {% for alumno in alumnos %}
+                    <option value="{{ alumno.pk }}">
+                        {{ alumno.apellidos }}, {{ alumno.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Descargar boletín CSV</button>
+        </form>
+    </section>
+{% endblock %}

@@ -1,0 +1,4 @@
+email_alumno,codigo_asignatura,evaluacion,valor
+alumno1@example.com,MAT101,1ª,8.5
+alumno1@example.com,MAT101,2ª,7.75
+alumno2@example.com,HIS101,final,9

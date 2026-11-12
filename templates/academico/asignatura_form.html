@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if object %}Editar asignatura{% else %}Añadir asignatura{% endif %}
+    | Gestión de alumnos
+{% endblock %}
+
+{% block content %}
+    <h1>{% if object %}Editar asignatura{% else %}Añadir asignatura{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+        <a href="{% url 'academico:asignatura_lista' %}">Cancelar</a>
+    </form>
+{% endblock %}

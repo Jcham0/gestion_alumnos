@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Alumnos | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Alumnos</h1>
+    <form method="get" role="search">
+        <label for="busqueda">Buscar por nombre o correo</label>
+        <input
+            id="busqueda"
+            type="search"
+            name="q"
+            value="{{ consulta }}"
+            placeholder="Nombre, apellidos o email"
+        >
+        <button type="submit">Buscar</button>
+        {% if consulta %}
+            <a href="{% url 'academico:alumno_lista' %}">Limpiar</a>
+        {% endif %}
+    </form>
+
+    <p><a href="{% url 'academico:alumno_crear' %}">Añadir alumno</a></p>
+
+    {% if alumnos %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Apellidos</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alumno in alumnos %}
+                        <tr>
+                            <td>{{ alumno.apellidos }}</td>
+                            <td>{{ alumno.nombre }}</td>
+                            <td>{{ alumno.email }}</td>
+                            <td>{{ alumno.fecha_nacimiento|date:"d/m/Y" }}</td>
+                            <td>{% if alumno.activo %}Sí{% else %}No{% endif %}</td>
+                            <td>
+                                <a href="{% url 'academico:alumno_editar' alumno.pk %}">Editar</a>
+                                <a href="{% url 'academico:alumno_eliminar' alumno.pk %}">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No se encontraron alumnos.</p>
+    {% endif %}
+
+    {% if is_paginated %}
+        <nav class="pagination" aria-label="Paginación">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ consulta|urlencode }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?q={{ consulta|urlencode }}&page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </nav>
+    {% endif %}
+{% endblock %}

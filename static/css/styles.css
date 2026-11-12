@@ -1,0 +1,190 @@
+:root {
+    color-scheme: light;
+    font-family: system-ui, sans-serif;
+    color: #202938;
+    background: #f3f5f8;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+}
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem max(1.25rem, calc((100% - 70rem) / 2));
+    color: #fff;
+    background: #17365d;
+}
+
+a {
+    color: #1756a9;
+}
+
+header a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.role-badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    color: #17365d;
+    background: #e6edf7;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.role-profesor {
+    color: #623c00;
+    background: #ffe2a8;
+}
+
+.role-alumno {
+    color: #14532d;
+    background: #c9f0d5;
+}
+
+.session-label {
+    color: #d7e3f3;
+}
+
+.nav-form {
+    margin: 0;
+}
+
+button {
+    padding: 0.55rem 0.9rem;
+    border: 0;
+    border-radius: 0.35rem;
+    color: #fff;
+    background: #2463a6;
+    font: inherit;
+    cursor: pointer;
+}
+
+input,
+select {
+    max-width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #aeb8c5;
+    border-radius: 0.3rem;
+    font: inherit;
+}
+
+form p {
+    display: grid;
+    gap: 0.35rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+th,
+td {
+    padding: 0.7rem;
+    border-bottom: 1px solid #dce2ea;
+    text-align: left;
+}
+
+.nota-suspensa {
+    color: #842029;
+    background: #fff1f1;
+    font-weight: 600;
+}
+
+.numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.export-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.page-content section {
+    margin-top: 2rem;
+}
+
+.page-content nav {
+    margin: 1rem 0;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+header button {
+    color: #17365d;
+    background: #fff;
+}
+
+main {
+    width: min(100% - 2rem, 70rem);
+    margin: 2rem auto;
+}
+
+.page-content,
+.message {
+    padding: 1rem 1.25rem;
+    border: 1px solid #dce2ea;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
+.messages {
+    margin-bottom: 1rem;
+}
+
+.message {
+    margin: 0 0 0.5rem;
+    border-color: #9ac9a7;
+    color: #14532d;
+    background: #effaf2;
+}
+
+.message.error {
+    border-color: #e2a2a2;
+    color: #842029;
+    background: #fff1f1;
+}
+
+@media (max-width: 600px) {
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    nav {
+        gap: 0.75rem;
+    }
+}

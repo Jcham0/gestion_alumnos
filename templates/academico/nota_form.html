@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar nota | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Registrar nota</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar nota</button>
+        <a href="{% url 'academico:matricula_lista' %}">Cancelar</a>
+    </form>
+{% endblock %}

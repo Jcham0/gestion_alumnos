@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Asignaturas | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Asignaturas</h1>
+    <form method="get" role="search">
+        <label for="busqueda">Buscar por nombre o código</label>
+        <input
+            id="busqueda"
+            type="search"
+            name="q"
+            value="{{ consulta }}"
+            placeholder="Nombre o código"
+        >
+        <button type="submit">Buscar</button>
+        {% if consulta %}
+            <a href="{% url 'academico:asignatura_lista' %}">Limpiar</a>
+        {% endif %}
+    </form>
+
+    <p>
+        <a href="{% url 'academico:asignatura_crear' %}">
+            Añadir asignatura
+        </a>
+    </p>
+
+    {% if asignaturas %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Curso</th>
+                        <th>Créditos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asignatura in asignaturas %}
+                        <tr>
+                            <td>{{ asignatura.nombre }}</td>
+                            <td>{{ asignatura.codigo }}</td>
+                            <td>{{ asignatura.curso }}</td>
+                            <td>{{ asignatura.creditos }}</td>
+                            <td>
+                                <a href="{% url 'academico:asignatura_editar' asignatura.pk %}">
+                                    Editar
+                                </a>
+                                <a href="{% url 'academico:asignatura_eliminar' asignatura.pk %}">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No se encontraron asignaturas.</p>
+    {% endif %}
+
+    {% if is_paginated %}
+        <nav class="pagination" aria-label="Paginación">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ consulta|urlencode }}&page={{ page_obj.previous_page_number }}">
+                    Anterior
+                </a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?q={{ consulta|urlencode }}&page={{ page_obj.next_page_number }}">
+                    Siguiente
+                </a>
+            {% endif %}
+        </nav>
+    {% endif %}
+{% endblock %}

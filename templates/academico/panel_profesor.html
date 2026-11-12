@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Panel profesor | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Panel del profesorado</h1>
+    <p>Accesos rápidos a las tareas de gestión académica.</p>
+    <ul>
+        <li><a href="{% url 'academico:alumno_lista' %}">Gestionar alumnos</a></li>
+        <li><a href="{% url 'academico:asignatura_lista' %}">Gestionar asignaturas</a></li>
+        <li><a href="{% url 'academico:matricula_lista' %}">Gestionar matrículas</a></li>
+        <li><a href="{% url 'academico:nota_crear' %}">Registrar una nota</a></li>
+        <li><a href="{% url 'reportes:importar_notas' %}">Importar notas CSV</a></li>
+        <li><a href="{% url 'reportes:informes' %}">Consultar informes</a></li>
+    </ul>
+{% endblock %}

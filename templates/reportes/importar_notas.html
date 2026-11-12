@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Importar notas | Gestión de alumnos{% endblock %}
+
+{% block content %}
+    <h1>Importar notas desde CSV</h1>
+    <p>
+        El archivo debe incluir las columnas
+        <code>email_alumno</code>, <code>codigo_asignatura</code>,
+        <code>evaluacion</code> y <code>valor</code>. La fecha de cada nota
+        será la fecha local de importación.
+    </p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Importar notas</button>
+    </form>
+
+    {% if resumen %}
+        <h2>Resultado</h2>
+        <p>Notas importadas: {{ resumen.importadas }}</p>
+        <p>Filas rechazadas: {{ resumen.total_rechazadas }}</p>
+        {% if resumen.rechazadas %}
+            <h3>Detalle de filas rechazadas</h3>
+            <ul>
+                {% for rechazo in resumen.rechazadas %}
+                    <li>Fila {{ rechazo.fila }}: {{ rechazo.motivo }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+{% endblock %}
